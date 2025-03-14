@@ -1,0 +1,33 @@
+.content-box{
+    box-shadow: rgba(100, 100, 111, 0.2)0px 7px 29px 0px;
+    margin: 5px;
+    margin-bottom:30px ;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* This line centers the content vertically */
+    align-items: center; /* This line centers the content horizontally */
+    
+}
+
+.content-box > input{
+    width: 200px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.content-box > button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color:white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100px;
+}
+
+ .content-box > button:hover{
+    background-color: #0056b3;
+ }
