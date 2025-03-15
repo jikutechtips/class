@@ -36,6 +36,7 @@ export default function ViewProduct() {
     { field: "name", headerName: "Product Name", width: 130 },
     { field: "price", headerName: "Product Price", width: 130 },
     { field: "reg_date", headerName: "Registration Date", width: 130 },
+    { field: "actions", headerName: "Actions", width: 130 },
   ];
 
   const rowss: Product[] = products;
