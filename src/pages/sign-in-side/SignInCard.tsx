@@ -195,7 +195,7 @@ export const SignInCard = function SignInCard(props: any) {
             const session = await fakeAsyncGetSession(formData);
             if (session) {
               setSession(session);
-              navigate(callbackUrl || `${"/demo"}`, { replace: true });
+              navigate(callbackUrl || `${"/"}`, { replace: true });
               return {};
             }
           } catch (error) {

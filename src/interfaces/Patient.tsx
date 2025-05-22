@@ -1,9 +1,12 @@
 export interface Patient {
-  id: string;
-  name: string;
+  id: number;
+  fullName: string;
+  dob: string;
   phone: string;
-  doctor: string;
-  entity_name: string;
-  reg_date: string;
+  doctor: string | null;
+  clinicName: string;
+  regDate: string;
   gender: string;
+  address: string;
+  regFee: string;
 }

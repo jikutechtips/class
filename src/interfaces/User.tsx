@@ -1,12 +1,17 @@
-interface User {
-  id: number;
+export interface User {
   fullName: string;
-  address: string;
-  phone_number: string;
+  phone: string;
   email: string;
+  address: string;
+  itExperience: string;
+  birthYear: string;
   password: string;
   title: string;
   entity_name: string;
-  registration_date: string;
+  academy: string | null;
+  practice: string | null;
+  inventory: string | null;
+  createdAt: string | null;
+  updateAt: string | null;
+  paymentStatus: string | null;
 }
-export default User;

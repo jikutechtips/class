@@ -4,12 +4,12 @@ import Stack from "@mui/material/Stack";
 import Content from "./Content";
 import AppTheme from "../shared-theme/AppTheme";
 import ColorModeSelect from "../shared-theme/ColorModeSelect";
-import { SignInCard } from "./SignInCard";
+import { SignInCard } from "./SignInCard"; // Assuming this is a component you use
 import { SignInPage } from "@toolpad/core/SignInPage";
-import { useSession } from "../../SessionContext";
+import { useSession } from "../../SessionContext"; // Keep this import as per user's original code
 import { useNavigate } from "react-router-dom";
-import User from "../../interfaces/User";
 import { Session } from "@toolpad/core/AppProvider";
+import { User } from "../../interfaces/User";
 
 export default function SignInSide(props: { disableCustomTheme?: boolean }) {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -20,178 +20,119 @@ export default function SignInSide(props: { disableCustomTheme?: boolean }) {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const [userFullName, setFullName] = React.useState("");
+  const [, setFullName] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
-  const fakeAsyncGetSession = async (formData: any): Promise<Session> => {
+
+  // Replaced fakeAsyncGetSession with realAsyncGetSession
+  const realAsyncGetSession = async (formData: FormData): Promise<Session> => {
     setLoading(true); // Set loading to true
-    return new Promise((resolve, reject) => {
-      fetch(`${API_BASE_URL}/users/${formData.get("email")}`, {
-        method: "GET",
-      })
-        .then(async (response) => {
-          if (!response.ok) {
-            // const e = await response.json();
-            // setErrorMessage(e.message);
-            // throw new Error(e.message);
-            fetch(`${API_BASE_URL}/clients/-/${formData.get("email")}`, {
-              method: "GET",
-            })
-              .then(async (response) => {
-                if (!response.ok) {
-                  const e = await response.json();
-                  setErrorMessage(e.message);
-                  throw new Error(e.message);
-                } // No need to set users state here, we only care about email
-                return response.json(); // Parse the response as JSON
-              })
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
-              .then((data: User) => {
-                // Assuming the response structure has an "email" property
+    if (!email || !password) {
+      setLoading(false);
+      throw new Error("Email and password are required.");
+    }
 
-                if (data && data.fullName) {
-                  setFullName(data.fullName);
-                  console.log(data.email);
-                  if (formData.get("password") === data.password) {
-                    resolve({
-                      user: {
-                        name: data.fullName,
-                        email: formData.get("email") || "",
-                        image:
-                          "https://clinic.mamed.co.tz/assets/images/logo_32_dark.png",
-                        title: data.title,
-                        entity_name: data.entity_name,
-                      },
-                    });
-                  }
-                  reject(new Error("Incorrect credentials."));
-                }
-              })
+    const loginRequest = { email, password };
 
-              .catch((error) => {
-                console.error("Error fetching user data:", error);
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/users/login`, {
+        // POST request to /login
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginRequest),
+      });
 
-                reject(error);
-              })
+      if (response.ok) {
+        // HTTP status 200-299 indicates success
+        const userData: User = await response.json(); // Use the User interface
+        setFullName(userData.fullName); // Update user full name state
+        setLoading(false);
 
-              .finally(() => {
-                // Update state with retrieved email
-              });
-          } // No need to set users state here, we only care about email
-          return response.json(); // Parse the response as JSON
-        })
-
-        .then((data: User) => {
-          // Assuming the response structure has an "email" property
-
-          if (data && data.fullName) {
-            console.log(data.email);
-            setFullName(data.fullName);
-            if (formData.get("password") === data.password) {
-              resolve({
-                user: {
-                  name: data.fullName,
-                  email: formData.get("email") || "",
-                  image:
-                    "https://clinic.mamed.co.tz/assets/images/logo_32_dark.png",
-                  title: data.title,
-                  entity_name: data.entity_name,
-                },
-              });
-            }
-            reject(new Error("Incorrect credentials."));
-          }
-        })
-
-        .catch((error) => {
-          console.error("Error fetching user data:", error);
-
-          reject(error);
-        })
-
-        .finally(() => {
-          // Update state with retrieved email
-        });
-    });
+        return {
+          user: {
+            name: userData.fullName,
+            email: userData.email,
+            image: "https://c.mamed.org/images/jikulogo", // Placeholder image
+            title: userData.title, // Use title from User data
+            entity_name: userData.entity_name,
+            phone: userData.phone,
+            address: userData.address,
+            itExperience: userData.itExperience,
+            birthYear: userData.birthYear,
+            academy: userData.academy,
+            practice: userData.practice,
+            inventory: userData.inventory,
+            createdAt: userData.createdAt,
+            updateAt: userData.updateAt,
+            paymentStatus: userData.paymentStatus,
+          },
+        };
+      } else if (response.status === 401) {
+        // Unauthorized status from backend
+        setLoading(false);
+        const errorText = await response.text();
+        setErrorMessage(errorText || "Invalid credentials.");
+        throw new Error(errorText || "Invalid credentials.");
+      } else {
+        // Handle other HTTP errors (e.g., 500 server error)
+        setLoading(false);
+        const errorText = await response.text();
+        setErrorMessage(
+          `Login failed: ${response.status} - ${errorText || "An unexpected error occurred"}`
+        );
+        throw new Error(
+          `Login failed: ${response.status} - ${errorText || "An unexpected error occurred"}`
+        );
+      }
+    } catch (error: any) {
+      setLoading(false);
+      console.error("Error during login API call:", error);
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
+        setErrorMessage(
+          "Network error: Could not connect to the server. Please check your API_BASE_URL and server status."
+        );
+        throw new Error(
+          "Network error: Could not connect to the server. Please check your API_BASE_URL and server status."
+        );
+      }
+      setErrorMessage(
+        error.message || "An unexpected error occurred during login."
+      );
+      throw error; // Re-throw the original error
+    }
   };
+
   const { setSession } = useSession();
   const navigate = useNavigate();
+
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
-      <Stack
-        direction="column"
-        component="main"
-        sx={[
-          {
-            justifyContent: "center",
-            height: "calc((1 - var(--template-frame-height, 0)) * 100%)",
-            marginTop: "max(40px - var(--template-frame-height, 0px), 0px)",
-            minHeight: "100%",
-          },
-          (theme) => ({
-            "&::before": {
-              content: '""',
-              display: "block",
-              position: "absolute",
-              zIndex: -1,
-              inset: 0,
-              backgroundImage:
-                "radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))",
-              backgroundRepeat: "no-repeat",
-              ...theme.applyStyles("dark", {
-                backgroundImage:
-                  "radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))",
-              }),
-            },
-          }),
-        ]}
-      >
-        <Stack
-          direction={{ xs: "column-reverse", md: "row" }}
-          sx={{
-            justifyContent: "center",
-            gap: { xs: 6, sm: 12 },
-            p: 2,
-            mx: "auto",
-          }}
-        >
-          <Stack
-            direction={{ xs: "column-reverse", md: "row" }}
-            sx={{
-              justifyContent: "center",
-              gap: { xs: 6, sm: 12 },
-              p: { xs: 2, sm: 4 },
-              m: "auto",
-            }}
-            spacing={2}
-          >
-            <SignInPage
-              // sx={{ backgroundColor: "background.paper" }}
-              providers={[{ id: "credentials", name: "Credentials" }]}
-              signIn={async (provider, formData, callbackUrl) => {
-                // Demo session
-                try {
-                  const session = await fakeAsyncGetSession(formData);
-                  if (session) {
-                    setSession(session);
-                    navigate(callbackUrl || `${"/demo"}`, { replace: true });
-                    return {};
-                  }
-                } catch (error) {
-                  return {
-                    error:
-                      error instanceof Error
-                        ? error.message
-                        : "An error occurred",
-                  };
-                }
-                return {};
-              }}
-            />
-            <Content path="/entity-registration" pathtype="Register" />
-          </Stack>
-        </Stack>
-      </Stack>
+      <SignInPage
+        // sx={{ backgroundColor: "background.paper" }}
+        providers={[{ id: "credentials", name: "Credentials" }]}
+        signIn={async (provider, formData, callbackUrl) => {
+          // Demo session
+          try {
+            const session = await realAsyncGetSession(formData); // Using realAsyncGetSession
+            if (session) {
+              setSession(session);
+              navigate(callbackUrl || `${"/"}`, { replace: true });
+              return {};
+            }
+          } catch (error) {
+            return {
+              error:
+                error instanceof Error ? error.message : "An error occurred",
+            };
+          }
+          return {};
+        }}
+      />
     </AppTheme>
   );
 }

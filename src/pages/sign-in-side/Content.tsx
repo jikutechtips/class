@@ -63,19 +63,6 @@ export default function Content(props: any) {
           <Typography variant="body2"> {props.pathtype}</Typography>
         </Button>
       </Box>
-      {items.map((item, index) => (
-        <Stack key={index} direction="row" sx={{ gap: 2 }}>
-          {item.icon}
-          <div>
-            <Typography gutterBottom sx={{ fontWeight: "medium" }}>
-              {item.title}
-            </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {item.description}
-            </Typography>
-          </div>
-        </Stack>
-      ))}
     </Stack>
   );
 }

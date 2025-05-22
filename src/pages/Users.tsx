@@ -8,4 +8,5 @@ export interface Users {
   title: string;
   entity_name: string;
   registration_date: string;
+  actions: string;
 }
