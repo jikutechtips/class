@@ -1,30 +1,12 @@
-// main.tsx (customRoutes)
 import * as React from "react";
-import DashboardPage from "./pages";
-import SignInSide from "./pages/sign-in-side/SignInSide";
-import AddArticle from "./pages/addarticle";
-import AdminPanel from "./pages/admin";
+import * as ReactDOM from "react-dom/client";
+import { Route, RouterProvider } from "react-router";
+import router from "./customer_router";
+import { SignInCard } from "./pages/sign-in-side/SignInCard";
+import Content from "./pages/sign-in-side/Content";
 
-interface RouteConfig {
-  path: string;
-  element: React.ReactNode; // Change to React.ReactNode
-  children?: RouteConfig[];
-}
-
-const customRoutes: RouteConfig[] = [
-  {
-    path: "/",
-    element: <DashboardPage />, // Use JSX element
-  },
-  {
-    path: "/dashboard",
-    element: <DashboardPage />, // Use JSX element
-  },
-  {
-    path: "/sign-in",
-    element: <SignInSide />, // Use JSX element
-  },
-  { path: "/admin", element: <AdminPanel /> },
-];
-
-export default customRoutes;
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />{" "}
+  </React.StrictMode>
+);
