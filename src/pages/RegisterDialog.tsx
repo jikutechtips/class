@@ -26,6 +26,7 @@ const paymentStatusOptions = [
 ];
 
 const CreateUserPage = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [userData, setUserData] = useState<UserData>({
     fullName: "",
     phone: "",
@@ -59,7 +60,7 @@ const CreateUserPage = () => {
 
     try {
       console.log(JSON.stringify(userData));
-      const response = await fetch(`http://localhost:8080/api/users`, {
+      const response = await fetch(`${API_BASE_URL}/api/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -219,7 +220,7 @@ const CreateUserPage = () => {
                   border: "1px solid #d1d5db",
                   borderRadius: "0.375rem",
                   outline: "none",
-                  backgroundColor: "white",
+                  backgroundColor: "#000000",
                   fontSize: "1rem",
                 }}
               />
