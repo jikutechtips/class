@@ -16,8 +16,8 @@ import { GoogleIcon, FacebookIcon, SitemarkIcon } from "./CustomIcons";
 import { SignInPage } from "@toolpad/core/SignInPage";
 import type { Session } from "@toolpad/core/AppProvider";
 import { useSession } from "../../SessionContext";
-import User from "../../interfaces/User";
 import { useNavigate } from "react-router-dom";
+import { User } from "../../interfaces/User";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",

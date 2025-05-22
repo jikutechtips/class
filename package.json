@@ -1,9 +1,12 @@
 {
+  "homepage": "https://jikutechtips.github.io/class",
   "name": "sign-demo",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },

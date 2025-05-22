@@ -1,9 +1,11 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-
+const GITHUB_REPO_NAME = "class";
 export default defineConfig({
   plugins: [react()],
+  base: `/${GITHUB_REPO_NAME}/`,
   build: {
+    outDir: "dist",
     rollupOptions: {
       output: {
         manualChunks(id) {

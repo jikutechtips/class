@@ -1,1 +1,0 @@
-import{j as t,H as r,B as n,e as i,T as e}from"../vendor-Q_I1QV0S.js";function s(a){return t.jsx(r,{direction:"column",sx:{alignSelf:"left",gap:2,maxWidth:600,marginBottom:10,marginTop:0},children:t.jsx(n,{sx:{display:{md:"flex"}},children:t.jsx(i,{href:a.path,color:"primary",variant:"text",children:t.jsxs(e,{variant:"body2",children:[" ",a.pathtype]})})})})}export{s as C};
