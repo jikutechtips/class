@@ -5,7 +5,6 @@ import Layout from "./layouts/dashboard";
 import DashboardPage from "./pages";
 import DentalLabApp from "./pages/homep";
 import ChooseClass from "./pages/chooseclass";
-import DashboardPage1 from "./pages/dashboard";
 import AdminPanel from "./pages/admin";
 
 // Jina la repository yako ya GitHub. Hakikisha hili linafanana na jina halisi la repo yako.
@@ -29,10 +28,6 @@ const router = createBrowserRouter(
             {
               path: "/chooseclass",
               element: <ChooseClass />,
-            },
-            {
-              path: "/dashboard",
-              element: <DashboardPage1 />,
             },
             {
               path: "/admin",

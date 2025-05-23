@@ -36,7 +36,7 @@ const formatTime = (seconds: number) => {
   return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
 };
 
-const AudioPlayerPage: React.FC<{ defaultAudioType: string }> = ({
+const AudioPlayerPage: React.FC<{ defaultAudioType: any }> = ({
   defaultAudioType,
 }) => {
   const [audioData, setAudioData] = useState<AudioItem[]>([]); // State to store fetched audio data

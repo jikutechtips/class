@@ -24,7 +24,7 @@ interface Article {
   postDate: string;
 }
 
-const DashboardPage1 = () => {
+const DashboardPage1: React.FC<{ stageName?: string }> = ({ stageName }) => {
   const theme = useTheme();
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -36,8 +36,6 @@ const DashboardPage1 = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Get stage name from URL
-  const [stageName, setStageName] = useState<string>("");
   const [activeComponent, setActiveComponent] = useState<React.ReactNode>(
     // Initially, show a loading message or an empty Articles component
     <Articles articles={[]} />
@@ -47,7 +45,7 @@ const DashboardPage1 = () => {
     const fetchArticles = async () => {
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/articles/type/${urlParams.get("stage") != null ? urlParams.get("stage") : "utangulizi"}`
+          `${API_BASE_URL}/api/articles/type/${stageName != null ? stageName : "utangulizi"}`
         );
         if (!response.ok) {
           throw new Error(`${response.status}`);
@@ -78,12 +76,6 @@ const DashboardPage1 = () => {
     };
 
     window.addEventListener("scroll", handleScroll);
-
-    // Get stage name from URL
-    const stage = urlParams.get("stage");
-    if (stage) {
-      setStageName(stage);
-    }
 
     return () => {
       window.removeEventListener("scroll", handleScroll);

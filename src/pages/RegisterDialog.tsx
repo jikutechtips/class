@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Button, Stack, TextField } from "@mui/material";
 import { TextareaAutosize } from "@mui/material";
-import { Autocomplete } from "@mui/material";
-import { Card, CardContent, CardHeader } from "@mui/material";
+import { Card, CardContent } from "@mui/material";
 import { Alert, AlertTitle } from "@mui/material";
 import { cyan } from "@mui/material/colors";
 
@@ -154,7 +153,7 @@ const CreateUserPage = () => {
                 value={userData.phone}
                 onChange={handleChange}
                 required
-                placeholder="123-456-7890"
+                placeholder="weka namba unayoweza kupata Notification"
                 sx={{ mt: 1, width: "100%" }}
                 InputProps={{
                   style: {
@@ -245,35 +244,6 @@ const CreateUserPage = () => {
                 onChange={handleChange}
                 required
                 placeholder="e.g awali, msingi, mtaalamu"
-                sx={{ mt: 1, width: "100%" }}
-                InputProps={{
-                  style: {
-                    backgroundColor: "white",
-                    borderRadius: "0.375rem",
-                  },
-                }}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="birthYear"
-                style={{
-                  display: "block",
-                  fontSize: "0.875rem",
-                  fontWeight: "medium",
-                  color: "text.primary",
-                }}
-              >
-                Birth Year
-              </label>
-              <TextField
-                type="text"
-                id="birthYear"
-                name="birthYear"
-                value={userData.birthYear}
-                onChange={handleChange}
-                required
-                placeholder="1999"
                 sx={{ mt: 1, width: "100%" }}
                 InputProps={{
                   style: {

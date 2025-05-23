@@ -311,8 +311,9 @@ Developer mahiri`,
     },
     {
       title: "Hatua 4: Inventory",
-      description:
-        "Katika sehemu hii, utapata muhtasari wa rasilimali na zana muhimu zitakazokusaidia katika safari yako ya kuwa Full Stack Developer.",
+      description: `Karibu katika sehemu ya nne na ya mwisho ya mwongozo wetu, "Inventory." Baada ya kujifunza misingi ya programming, kuchagua zana zako za kwanza, na kufanya mazoezi ya vitendo kwa kujenga miradi mbalimbali katika sehemu zilizopita (Utangulizi, Academy, na Practice), sasa umefikia hatua muhimu sana: jinsi ya kuonyesha uwezo wako, kujitengenezea thamani katika soko, na kuanza kunufaika na ujuzi wako wa utengenezaji programu. 
+ Sehemu hii ya Inventory haihusu tu kuhesabu 'vitu' ulivyojifunza, bali inahusu jinsi ya kuweka 'thamani' kwenye ujuzi na kazi zako. Itakupa maarifa ya jinsi ya kujitangaza, kujenga chapa yako binafsi (personal brand), kufikia wateja au watumiaji wa bidhaa zako, kusimamia ukuaji (scalability), na hatimaye, jinsi ya kugeuza ujuzi wako kuwa fursa za kiuchumi, iwe kwa kuajiriwa kazi nzuri au kujiajiri mwenyewe. Lengo hapa ni kukufundisha kuwa na mtazamo wa kibiashara katika safari yako ya utengenezaji programu. Haitoshi tu kuwa na uwezo wa kuandika kodi nzuri; unahitaji pia kujua jinsi ya kuuza ujuzi huo, kuwasiliana na wateja, na kusimamia miradi yako kama biashara. Sehemu hii itakuandaa kwa ulimwengu halisi wa kazi na kukusaidia kujenga njia yako mwenyewe ya mafanikio.
+`,
     },
   ];
 
