@@ -137,38 +137,6 @@ const DashboardPage1: React.FC<{ stageName?: string }> = ({ stageName }) => {
       }}
     >
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        elevation={0}
-        sx={{
-          background: appBarColor,
-          color: "#fff",
-          boxShadow:
-            appBarColor === "transparent"
-              ? "none"
-              : "0 2px 4px rgba(0, 0, 0, 0.2)",
-          transition: "background-color 0.3s ease",
-          top: 0,
-          left: 0,
-          width: "100%",
-          zIndex: 1000,
-        }}
-      >
-        <Toolbar
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="h6" sx={{ fontWeight: 600, color: "#fff" }}>
-            {stageName ? `${stageName}` : "Stage"}
-          </Typography>{" "}
-          <Typography variant="h6" sx={{ fontWeight: 600, color: "#fff" }}>
-            {"Username"}
-          </Typography>
-        </Toolbar>
-      </AppBar>
 
       <Box
         sx={{
