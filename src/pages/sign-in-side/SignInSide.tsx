@@ -56,7 +56,7 @@ export default function SignInSide(props: { disableCustomTheme?: boolean }) {
           user: {
             name: userData.fullName,
             email: userData.email,
-            image: "https://c.mamed.org/images/jikulogo", // Placeholder image
+            image: "https://placehold.co/40x40/007bff/ffffff?text=User", // Placeholder image
             title: userData.title, // Use title from User data
             entity_name: userData.entity_name,
             phone: userData.phone,

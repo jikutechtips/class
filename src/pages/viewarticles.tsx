@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import {
   Button,
@@ -13,7 +13,11 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
-  IconButton, // Added IconButton for a more compact action button
+  IconButton,
+  MenuItem, // Added MenuItem for select options
+  Select, // Added Select for pagination options
+  InputLabel, // Added InputLabel for the select field
+  FormControl, // Added FormControl to group label and select
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -26,8 +30,6 @@ interface Article {
   type: string;
   postDate: string; // Assuming ISO 8601 string format
 }
-
-// Base URL for your API
 
 // Main App component
 export default function ViewArticles() {
@@ -54,6 +56,11 @@ export default function ViewArticles() {
     "success" | "error" | "info" | "warning"
   >("success");
 
+  // State for search query
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  // State for rows per page, initialized to 10 as per DataGrid's default
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+
   // Function to fetch articles from the API
   const fetchArticles = useCallback(async () => {
     setLoading(true);
@@ -72,7 +79,7 @@ export default function ViewArticles() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [API_BASE_URL]); // Added API_BASE_URL to dependency array
 
   // Fetch articles on component mount
   useEffect(() => {
@@ -136,7 +143,13 @@ export default function ViewArticles() {
     } finally {
       setLoading(false);
     }
-  }, [selectedArticle, editForm, handleEditDialogClose, fetchArticles]);
+  }, [
+    selectedArticle,
+    editForm,
+    handleEditDialogClose,
+    fetchArticles,
+    API_BASE_URL,
+  ]); // Added API_BASE_URL to dependency array
 
   // Handle opening the delete confirmation dialog
   const handleDeleteClick = useCallback((article: Article) => {
@@ -173,7 +186,7 @@ export default function ViewArticles() {
     } finally {
       setLoading(false);
     }
-  }, [articleToDelete, handleDeleteConfirmClose, fetchArticles]);
+  }, [articleToDelete, handleDeleteConfirmClose, fetchArticles, API_BASE_URL]); // Added API_BASE_URL to dependency array
 
   // Snackbar utility function
   const showSnackbar = useCallback(
@@ -195,6 +208,26 @@ export default function ViewArticles() {
     []
   );
 
+  // Filter articles based on search query
+  const filteredArticles = useMemo(() => {
+    if (!searchQuery) {
+      return articles;
+    }
+    const lowerCaseQuery = searchQuery.toLowerCase();
+    return articles.filter(
+      (article) =>
+        article.title.toLowerCase().includes(lowerCaseQuery) ||
+        article.body.toLowerCase().includes(lowerCaseQuery) ||
+        article.type.toLowerCase().includes(lowerCaseQuery) ||
+        article.postDate.toLowerCase().includes(lowerCaseQuery) // Also search in postDate
+    );
+  }, [articles, searchQuery]);
+
+  // Handle change in rows per page
+  const handleRowsPerPageChange = useCallback((event: any) => {
+    setRowsPerPage(Number(event.target.value));
+  }, []);
+
   // Define DataGrid columns
   const columns: GridColDef<Article>[] = [
     { field: "id", headerName: "ID", width: 60 },
@@ -208,7 +241,6 @@ export default function ViewArticles() {
       headerName: "Actions",
       width: 150,
       getActions: (params: GridRowParams<Article>) => [
-        // Using IconButton directly instead of GridActionsCellItem
         <IconButton
           key="edit"
           aria-label="edit"
@@ -230,8 +262,48 @@ export default function ViewArticles() {
   ];
 
   return (
-    <Container maxWidth="lg" className="py-8">
+    <Container maxWidth="lg" className="py-8 font-inter">
       <Box className="flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-lg">
+        <Typography
+          variant="h4"
+          component="h1"
+          className="mb-6 text-blue-700 font-bold"
+        >
+          Article Management
+        </Typography>
+
+        {/* Search and Pagination Controls */}
+        <Box className="w-full flex flex-col sm:flex-row items-center justify-between mb-4 gap-4">
+          <TextField
+            label="Search Articles"
+            variant="outlined"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full sm:w-1/2 md:w-1/3 rounded-md"
+            InputProps={{
+              className: "rounded-md",
+            }}
+          />
+          <FormControl
+            variant="outlined"
+            className="w-full sm:w-auto min-w-[120px] rounded-md"
+          >
+            <InputLabel id="rows-per-page-label">Rows per page</InputLabel>
+            <Select
+              labelId="rows-per-page-label"
+              value={rowsPerPage}
+              onChange={handleRowsPerPageChange}
+              label="Rows per page"
+              className="rounded-md"
+            >
+              <MenuItem value={5}>5</MenuItem>
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={20}>20</MenuItem>
+              <MenuItem value={50}>50</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+
         {loading && (
           <Box className="flex justify-center items-center h-48">
             <CircularProgress />
@@ -242,27 +314,28 @@ export default function ViewArticles() {
         )}
 
         {error && (
-          <Alert severity="error" className="w-full mb-4">
+          <Alert severity="error" className="w-full mb-4 rounded-md">
             {error}
           </Alert>
         )}
 
         {!loading && !error && (
           <Box className="w-full h-[600px] rounded-lg overflow-hidden">
-            {" "}
-            {/* Fixed height for DataGrid */}
             <DataGrid
-              rows={articles}
+              rows={filteredArticles} // Use filtered articles here
               columns={columns}
-              getRowId={(row) => row.id} // Ensure DataGrid uses 'id' as the unique key
+              getRowId={(row) => row.id}
               initialState={{
                 pagination: {
-                  paginationModel: { pageSize: 10, page: 0 },
+                  paginationModel: { pageSize: rowsPerPage, page: 0 }, // Use rowsPerPage state
                 },
               }}
-              pageSizeOptions={[5, 10, 20]}
+              // Removed pageSizeOptions as we are now controlling it via a separate select
+              // pageSizeOptions={[5, 10, 20]} // This is now handled by the custom Select component
               disableRowSelectionOnClick
-              className="rounded-lg"
+              className="rounded-lg shadow-inner"
+              // Add a key to force re-render when rowsPerPage changes, if needed (though DataGrid handles it)
+              key={rowsPerPage}
             />
           </Box>
         )}
@@ -289,7 +362,10 @@ export default function ViewArticles() {
             variant="outlined"
             value={editForm.title}
             onChange={handleEditFormChange}
-            className="mb-4"
+            className="mb-4 rounded-md"
+            InputProps={{
+              className: "rounded-md",
+            }}
           />
           <TextField
             margin="dense"
@@ -302,7 +378,10 @@ export default function ViewArticles() {
             variant="outlined"
             value={editForm.body}
             onChange={handleEditFormChange}
-            className="mb-4"
+            className="mb-4 rounded-md"
+            InputProps={{
+              className: "rounded-md",
+            }}
           />
           <TextField
             margin="dense"
@@ -313,6 +392,10 @@ export default function ViewArticles() {
             variant="outlined"
             value={editForm.type}
             onChange={handleEditFormChange}
+            className="rounded-md"
+            InputProps={{
+              className: "rounded-md",
+            }}
           />
         </DialogContent>
         <DialogActions className="p-4 border-t border-gray-200">
@@ -348,7 +431,8 @@ export default function ViewArticles() {
         <DialogContent className="p-6">
           <Typography>
             Are you sure you want to delete the article "
-            {articleToDelete?.title}"? This action cannot be undone.
+            <span className="font-semibold">{articleToDelete?.title}</span>"?
+            This action cannot be undone.
           </Typography>
         </DialogContent>
         <DialogActions className="p-4 border-t border-gray-200">
@@ -382,6 +466,7 @@ export default function ViewArticles() {
           onClose={handleSnackbarClose}
           severity={snackbarSeverity}
           sx={{ width: "100%" }}
+          className="rounded-md"
         >
           {snackbarMessage}
         </Alert>
