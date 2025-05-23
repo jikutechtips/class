@@ -13,6 +13,7 @@ import Fade from "@mui/material/Fade";
 import AddArticle from "./addarticle";
 import ViewUsers from "./viewusers";
 import PaymentInfo from "./paymentInfo";
+import ViewArticles from "./viewarticles";
 
 export default function AdminPanel() {
   const [expanded, setExpanded] = React.useState(false);
@@ -57,6 +58,18 @@ export default function AdminPanel() {
         </AccordionSummary>
         <AccordionDetails>
           <AddArticle />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel2-content"
+          id="panel2-header"
+        >
+          <Typography component="span">View Articles</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <ViewArticles />
         </AccordionDetails>
       </Accordion>
       <Accordion>

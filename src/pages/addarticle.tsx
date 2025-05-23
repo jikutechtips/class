@@ -14,6 +14,7 @@ import {
 
 // Main App component
 export default function AddArticle() {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [title, setTitle] = useState<string>("");
   const [body, setBody] = useState<string>("");
   const [type, setType] = useState<string>("");
@@ -32,7 +33,7 @@ export default function AddArticle() {
 
     try {
       // Make the POST request to the API
-      const response = await fetch("http://localhost:8080/api/articles", {
+      const response = await fetch(`${API_BASE_URL}/api/articles`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", // Specify content type as JSON
