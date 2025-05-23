@@ -72,10 +72,10 @@ const ChooseClass = () => {
   const [showDashboard, setShowDashboard] = useState(false);
   const [dashboardStage, setDashboardStage] = useState<string | null>(null);
 
-  const fetchArticles = async () => {
+  const fetchArticles = async (stageName: string) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/api/payments/type/${"inventory"}`
+        `${API_BASE_URL}/api/payments/type/${stageName}`
       );
       if (!response.ok) {
         throw new Error(`${response.status}`);
@@ -92,9 +92,14 @@ const ChooseClass = () => {
       setLoading(false);
     }
   };
-
+  const handleOpenPaymentDialog = (stageName: string) => {
+    fetchArticles(stageName);
+    setOpenPaymentDialog(true);
+  };
+  const handlepaymentClose = () => {
+    setOpenPaymentDialog(false);
+  };
   const handleStageSelect = (stageName: string) => {
-    fetchArticles();
     setSelectedStage(stageName);
     setIsLoggedIn(true); // Simulate login
     sessionStorage.setItem("isLoggedIn", "true");
@@ -122,7 +127,8 @@ const ChooseClass = () => {
       setShowDashboard(true); // Show the DashboardPage1 component
       console.log(academy, inventory, practice);
     } else {
-      setOpenPaymentDialog(true); // Open payment dialog for inaccessible stages
+      // Open payment dialog for inaccessible stages
+      handleOpenPaymentDialog(stageName);
       setShowDashboard(false); // Ensure Dashboard is not shown
       console.log(academy, inventory, practice);
     }
@@ -231,7 +237,7 @@ const ChooseClass = () => {
           {/* Payment Dialog (remains outside conditional rendering of main content) */}
           <Dialog
             open={openPaymentDialog}
-            onClose={() => setOpenPaymentDialog(false)}
+            onClose={handlepaymentClose}
             maxWidth="md"
           >
             <DialogTitle>{`Fanya Malipo ,  Ili Kuendelea Hatua ya ${selectedStage}`}</DialogTitle>
