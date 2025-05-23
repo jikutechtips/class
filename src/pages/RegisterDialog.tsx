@@ -182,7 +182,7 @@ const CreateUserPage = () => {
                 value={userData.email}
                 onChange={handleChange}
                 required
-                placeholder="john.doe@example.com"
+                placeholder="bakari@example.com"
                 sx={{ mt: 1, width: "100%" }}
                 InputProps={{
                   style: {
@@ -204,23 +204,20 @@ const CreateUserPage = () => {
               >
                 Address
               </label>
-              <TextareaAutosize
+              <TextField
+                type="text"
                 id="address"
                 name="address"
                 value={userData.address}
                 onChange={handleChange}
                 required
-                placeholder="123 Main St"
-                style={{
-                  marginTop: 1,
-                  width: "100%",
-                  minHeight: "100px",
-                  padding: 8,
-                  border: "1px solid #d1d5db",
-                  borderRadius: "0.375rem",
-                  outline: "none",
-                  backgroundColor: "#000000",
-                  fontSize: "1rem",
+                placeholder="Ubungo , Dar es Salaam"
+                sx={{ mt: 1, width: "100%" }}
+                InputProps={{
+                  style: {
+                    backgroundColor: "white",
+                    borderRadius: "0.375rem",
+                  },
                 }}
               />
             </div>
